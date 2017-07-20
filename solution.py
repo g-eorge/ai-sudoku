@@ -35,17 +35,27 @@ def assign_value(values, box, value):
     return values
 
 def naked_twins(values):
-    """Eliminate values using the naked twins strategy.
+    """
+    Eliminate values using the naked twins strategy.
     Args:
         values(dict): a dictionary of the form {'box_name': '123456789', ...}
-
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+    for unit in unitlist:
+        boxes_with_pairs = [box for box in unit if len(values[box]) == 2]
+        if len(boxes_with_pairs) == 2:
+            twin_a = boxes_with_pairs[0]
+            twin_b = boxes_with_pairs[1]
+            if values[twin_a] == values[twin_b]:
+                # Eliminate the naked twins as possibilities for their peers
+                eliminate_values = values[twin_a] # Doesn't matter which twin we get the values from
+                for box in unit:
+                    if box not in boxes_with_pairs:
+                        for value in eliminate_values:
+                            assign_value(values, box, values[box].replace(value, ''))
 
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
-    pass
+    return values
 
 def grid_values(grid):
     """
