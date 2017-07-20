@@ -16,7 +16,9 @@ boxes = cross(rows, cols)
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
-unitlist = row_units + column_units + square_units
+diagonal_units = [list(map(lambda x: x[0]+x[1], zip(rows, cols))),
+                  list(map(lambda x: x[0]+x[1], zip(rows, reversed(cols))))]
+unitlist = row_units + column_units + square_units + diagonal_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s], []))-set([s])) for s in boxes)
 
@@ -42,6 +44,7 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+    # Find naked twins
     for unit in unitlist:
         boxes_with_pairs = [box for box in unit if len(values[box]) == 2]
         if len(boxes_with_pairs) == 2:
@@ -142,6 +145,7 @@ def reduce_puzzle(values):
 
         values = eliminate(values)
         values = only_choice(values)
+        values = naked_twins(values)
 
         # Check how many boxes have a determined value, to compare
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
