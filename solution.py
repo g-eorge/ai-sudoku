@@ -1,5 +1,5 @@
 """
-Solve sodukos using constraint propogation and depth first search.
+Solve sodukos using constraint propagation and depth first search.
 """
 
 assignments = []
@@ -44,19 +44,33 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    # Find naked twins
     for unit in unitlist:
+        # Find boxes with two possibilities
         boxes_with_pairs = [box for box in unit if len(values[box]) == 2]
-        if len(boxes_with_pairs) == 2:
-            twin_a = boxes_with_pairs[0]
-            twin_b = boxes_with_pairs[1]
-            if values[twin_a] == values[twin_b]:
-                # Eliminate the naked twins as possibilities for their peers
-                eliminate_values = values[twin_a] # Doesn't matter which twin we get the values from
-                for box in unit:
-                    if box not in boxes_with_pairs:
-                        for value in eliminate_values:
-                            assign_value(values, box, values[box].replace(value, ''))
+
+        # Look up the possible values for those boxes
+        values_with_pairs = list(map(lambda box: values[box], boxes_with_pairs))
+
+        # Index the values, to find the boxes that have the same value
+        value_counts = {}
+        for index, value in enumerate(values_with_pairs):
+            if value not in value_counts:
+                value_counts[value] = [boxes_with_pairs[index]]
+            else:
+                value_counts[value].append(boxes_with_pairs[index])
+
+        # The naked twins are the ones that have two boxes with the same possible values
+        found_naked_twins = [(vals, boxes) for vals, boxes in value_counts.items()
+                             if len(boxes) == 2]
+
+        # Eliminate the naked twins as possibilities for their peers
+        for naked_twin in found_naked_twins:
+            twins = naked_twin[1]
+            eliminate_values = naked_twin[0]
+            for box in unit:
+                if box not in twins:
+                    for value in eliminate_values:
+                        assign_value(values, box, values[box].replace(value, ''))
 
     return values
 
