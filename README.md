@@ -4,6 +4,9 @@
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?
 A: We implement a new constraint to check for and eliminate the naked twins at each step in the search for the solution.
+The naked twins constraint works by finding pairs of boxes containing the same two possible solutions occuring in the
+same unit. Since this tells us that one of the two possibilities must belong in each box, we can remove those two
+possibilities from all the other boxes in the unit if they occur.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?
