@@ -24,7 +24,7 @@ Pick a box with a minimal number of possible values. Try to solve each of the pu
 
 ### Example Solution
 
-![Sudoku](https://github.com/g-eorge/ai-sudoku/blob/master/images/hard-solution.png)
+<img src="https://github.com/g-eorge/ai-sudoku/blob/master/images/hard-solution.png" width="50%" />
 
 ### Install
 
